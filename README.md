@@ -1,0 +1,2 @@
+# snake_cocos_plus
+基于Cocos Creator官方文档案例小游戏的爆改贪吃蛇
