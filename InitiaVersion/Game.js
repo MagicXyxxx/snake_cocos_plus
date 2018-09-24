@@ -1,8 +1,3 @@
-/*
-	改动Game.js
-	能移动，吃掉食物后不能增加节点
-*/
-
 cc.Class({
     extends: cc.Component,
 
@@ -34,36 +29,11 @@ cc.Class({
         scoreAudio: {
             default: null,
             url: cc.AudioClip
-        },
-		/*
-		spRoker: {
-            default: null,
-            url: cc.Texture2D
-        },
-		
-		spRokerCenter: {
-            default: null,
-            url: cc.Texture2D
         }
-		*/
-		spRoker: {
-            default: null,
-            type: cc.Sprite
-        },
-		
-		spRokerCenter: {
-            default: null,
-            type: cc.Sprite
-        }
-		//*/
-		
-//		spRoker: cc.Sprite,
-//      spRokerCenter: cc.Sprite
     },
 
     // use this for initialization
     onLoad: function () {
-//		console.log("onLoad ...");
         // 获取地平面的 y 轴坐标
         this.groundY = this.ground.y + this.ground.height/2;
         // 初始化计时器
@@ -73,13 +43,6 @@ cc.Class({
         this.spawnNewStar();
         // 初始化计分
         this.score = 0;
-		
-		this.spRoker.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
-        this.spRoker.node.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
-        this.spRoker.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
-        this.spRoker.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
-
-		
     },
 
     spawnNewStar: function() {
@@ -99,12 +62,8 @@ cc.Class({
     getNewStarPosition: function () {
         var randX = 0;
         // 根据地平面位置和主角跳跃高度，随机得到一个星星的 y 坐标
-//        var randY = this.groundY + cc.random0To1() * this.player.getComponent('Player').jumpHeight + 50;
-        
-		var maxY = this.groundY+this.node.height/2;
-		var randY = cc.randomMinus1To1() * maxY;
-		
-		// 根据屏幕宽度，随机得到一个星星 x 坐标
+        var randY = this.groundY + cc.random0To1() * this.player.getComponent('Player').jumpHeight + 50;
+        // 根据屏幕宽度，随机得到一个星星 x 坐标
         var maxX = this.node.width/2;
         randX = cc.randomMinus1To1() * maxX;
         // 返回星星坐标
@@ -120,7 +79,6 @@ cc.Class({
             return;
         }
         this.timer += dt;
-		console.log("update ...");
     },
 
     gainScore: function () {
@@ -132,63 +90,7 @@ cc.Class({
     },
 
     gameOver: function () {
-        //this.player.stopAllActions(); //停止 player 节点的跳跃动作
-		//if (this.IsLoad === false)
-		{
-			cc.director.loadScene('game');
-			//this.IsLoad = true;
-		}
-        
-    },
-	
-	onTouchStart: function(event) {
-		var touchPos = event.getLocation();
-        var pos = this.spRoker.node.convertToNodeSpaceAR(touchPos);
-        var dir = this.getDirection(pos);
-        console.log("start ...", dir);
-        this.updateRokerCenterPos(pos);
-
-		//console.log("start ...");
-    },
-
-    onTouchMove: function(event) {
-		var touchPos = event.getLocation();
-        var pos = this.spRoker.node.convertToNodeSpaceAR(touchPos);
-        var dir = this.getDirection(pos);
-        console.log("move ...", dir);
-        this.updateRokerCenterPos(pos);
-
-		
-		//console.log("move ...");
-    },
-
-    onTouchEnd: function(event) {
-        console.log("end ...");
-		this.updateRokerCenterPos(cc.v2(0, 0));
-
-    },
-
-    onTouchCancel: function(event) {
-        console.log("cancel ...");
-		this.updateRokerCenterPos(cc.v2(0, 0));
-    },
-	///*
-	updateRokerCenterPos: function(pos) {
-        this.spRokerCenter.node.setPosition(pos);
-    },
-	
-	getDirection: function(pos) {
-        var x = pos.x;
-        var y = pos.y;
-        if (x <= y && x > -y) {
-            return cc.v2(0, 1);// 上
-        } else if (x >= y && x < -y) {
-            return cc.v2(0, -1);// 下
-        } else if (x <= y && x < -y) {
-            return cc.v2(-1, 0);// 左
-        } else {
-            return cc.v2(1, 0);// 右
-        }
-    }//*/
-
+        this.player.stopAllActions(); //停止 player 节点的跳跃动作
+        cc.director.loadScene('game');
+    }
 });

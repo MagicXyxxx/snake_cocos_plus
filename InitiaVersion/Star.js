@@ -1,7 +1,3 @@
-/*
-	改动Star.js
-*/
-
 cc.Class({
     extends: cc.Component,
 
